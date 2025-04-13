@@ -134,7 +134,7 @@ function search(){
 		for(app of apps){
 		if(app.name.toLowerCase().match(document.getElementById('searchbar').value.toLowerCase())){
 		console.log(app)
-		appsCard(app).render("#applist")
+		appsCard(app).render("#applist",true)
 		}}});
 	}
 </script>
