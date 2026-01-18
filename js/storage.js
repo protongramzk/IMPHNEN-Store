@@ -1,50 +1,37 @@
-// Storage Management for Favorites
+// Storage management for favorites using localStorage
 
-class FavoritesStorage {
-    constructor() {
-        // Initialize favorites
-        this.favorites = this.loadFavorites() || [];
-    }
-
-    loadFavorites() {
-        // Load favorites from local storage
-        const favorites = localStorage.getItem('favorites');
-        return favorites ? JSON.parse(favorites) : [];
-    }
-
-    saveFavorites() {
-        // Save favorites to local storage
-        localStorage.setItem('favorites', JSON.stringify(this.favorites));
-    }
-
-    addFavorite(item) {
-        // Add an item to favorites
-        if (!this.favorites.includes(item)) {
-            this.favorites.push(item);
-            this.saveFavorites();
-        }
-    }
-
-    removeFavorite(item) {
-        // Remove an item from favorites
-        this.favorites = this.favorites.filter(favorite => favorite !== item);
-        this.saveFavorites();
-    }
-
-    getFavorites() {
-        // Get all favorite items
-        return this.favorites;
+function initializeStorage() {
+    if (!localStorage.getItem('favorites')) {
+        localStorage.setItem('favorites', JSON.stringify([]));
     }
 }
 
-// Example usage:
-const favoritesStorage = new FavoritesStorage();
+function getFavorites() {
+    return JSON.parse(localStorage.getItem('favorites')) || [];
+}
 
-// Add a favorite item
-favoritesStorage.addFavorite('item1');
+function addFavorite(item) {
+    const favorites = getFavorites();
+    if (!favorites.includes(item)) {
+        favorites.push(item);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+}
 
-// Get all favorites
-console.log(favoritesStorage.getFavorites());
+function removeFavorite(item) {
+    let favorites = getFavorites();
+    favorites = favorites.filter(favorite => favorite !== item);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+}
 
-// Remove a favorite item
-favoritesStorage.removeFavorite('item1');
+function isFavorite(item) {
+    const favorites = getFavorites();
+    return favorites.includes(item);
+}
+
+function clearFavorites() {
+    localStorage.removeItem('favorites');
+}
+
+// Initialize storage
+initializeStorage();
