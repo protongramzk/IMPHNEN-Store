@@ -1,141 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="stylesheet" href="tabler-icons.min.css">
-<link rel="stylesheet" href="bootstrap.min.css">
-
-<title></title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMPHNEN Store</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-dark"  >
-
-
-
-
-
-<nav class="fixed-bottom row justify-content-center text-center bg-dark">
-	<button onclick="switchPage('apps')" class="btn btn-none fs-1 col-4 ti ti-home"></button>
-	<button onclick="switchPage('searchpage')" class="btn btn-none fs-1 col-4 ti ti-search"></button>
-	<button onclick="switchPage('favorite')" class="btn btn-none fs-1 col-4 ti ti-star-filled"></button>
-	<div class="col-12 small" ></div>
-</nav>
+<body>
+    <header>
+        <h1>Welcome to the IMPHNEN Store</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Our Products</h2>
+            <div id="product-list"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 IMPHNEN Store. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
 </body>
-<style type="text/css">
-@font-face{
-src:url(fonts/IBMPlexSans-Text.otf);
-font-family:IBMPlex;
-}
-@font-face{
-src:url(fonts/Ubuntu-Mono.woff);
-font-family:Ubuntu;
-}
-*{color:#fff !important;font-family:IBMPlex;}
-.icon{background-size:100% 100%;
-width:70px;
-height:70px;
-padding:20px;
-}
-</style>
-<script src="lib/store.min.js"></script>
-<script src="lib/elode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
-<script src="lib/store.everything.min.js"></script>
-<script>
-Elode.use("h1","div","button","img","input")
-
-if(!store.get('fav')) store.set('fav',[])
-
-function appsCard(app,fav){
-return div(".card.bg-dark.p-3.m-2.my-3.shadow-lg",
-	div(".row",
-		div(".col-3",div(".icon",{style:{backgroundImage:"url(database/icons/"+app.icon+")"}})),
-		div(".col-9. ",div(".fs-2 "+app.name),div(".small "+app.dev)),
-		div(".col-12.my-2 "+app.description),
-		div(".col-6",button(".btn.w-100.rounded-pill.btn-light.text-dark Open",{onclick:function(){location.href=app.url}})),
-		div(".col-6",(fav?button(".btn.w-100.rounded-pill.btn-outline-light Favorite",{onclick:function(){addfav(app)}}):button(".btn.w-100.rounded-pill.btn-outline-danger Delete",{onclick:function(){remFav(app)}})))
-	)
-)
-}
-
-
-
-div("#apps",h1("IMPHNEN Community Store")).render()
-div("#favorite", h1("Favorit"),{style:{display:"none"}}).render()
-
-div("#searchpage.p-2",
-	div(".input-group.rounded-pill",
-	input("#searchbar.form-control.text-dark[placeholder Cari Aplikasi]"),
-	button(".btn.btn-primary.ti.ti-search[onclick search()]")),
-	div("#applist"),{style:{display:"none"}}).render()
-
-function switchPage(page){
-	document.getElementById("apps").style.display="none"
-	document.getElementById("favorite").style.display="none"
-	document.getElementById("searchpage").style.display="none"
-	document.getElementById(page).style.display="block"
-}
-
-function addfav(app){
-	if(store.get("fav").includes(app)) return null
-	else{
-	let prevFav = store.get("fav")
-	store.set("fav",[...store.get("fav"),app])
-	console.log(store.get("fav"))}
-	document.getElementById("favorite").innerHTML=""
-	h1("Favorite").render("#favorite")
-	store.get("fav").map(a=>{
-	appsCard(a).render("#favorite",true)
-	})
-}
-
-function remFav(app){
-	let removed = store.get("fav")
-	removed.filter((v,i,a)=>{
-		if(v.name==app.name){
-			removed.splice(i,1)
-			store.set("fav",removed)
-			return null
-		}
-	})
-	document.getElementById("favorite").innerHTML=""
-	h1("Favorite").render("#favorite")
-	store.get("fav").map(a=>{
-	appsCard(a).render("#favorite",true)
-	}
-	)
-
-}
-
-store.get("fav").map(a=>{
-	appsCard(a).render("#favorite",true)
-}
-)
-
-var xhr = new XMLHttpRequest();
-	xhr.open("GET","https://protongramzk.github.io/IMPHNEN-Store/database/apps.json");
-	xhr.send();
-	xhr.addEventListener("load", () => {
-	  
-  var apps = JSON.parse(xhr.responseText);
-	   for(app of apps){
-	  		appsCard(app,true).render("#apps")
-}});
-
-
-function search(){
-		document.getElementById('applist').innerHTML=""
-		var xhr = new XMLHttpRequest();
-		xhr.open("GET","https://protongramzk.github.io/IMPHNEN-Store/database/apps.json");
-		xhr.send();
-		xhr.addEventListener("load", () => {
-		var apps = JSON.parse(xhr.responseText);
-		for(app of apps){
-		if(app.name.toLowerCase().match(document.getElementById('searchbar').value.toLowerCase())){
-		console.log(app)
-		appsCard(app).render("#applist",true)
-		}}});
-	}
-</script>
 </html>
